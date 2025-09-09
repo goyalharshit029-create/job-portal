@@ -77,21 +77,35 @@ const Applications = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {userApplications.map((job, index) => true ? (
+                        {userApplications.map((job, index) => (
                             <tr key={index}>
                                 <td className='py-3 px-4 flex items-center gap-2 border-b'>
-                                    <img className='w-8 h-8' src={job.companyId?.image || assets.default_company_image} alt={job.companyId?.name || "Company"} />
+                                    <img
+                                        className='w-8 h-8'
+                                        src={job.companyId?.image || assets.default_company_image}
+                                        alt={job.companyId?.name || "Company"}
+                                    />
                                     {job.companyId?.name || "Unknown Company"}
                                 </td>
-                                <td className='py-2 px-4 border-b'>{job.jobId?.title}</td>
-                                <td className='py-2 px-4 border-b max-sm:hidden'>{job.jobId?.location}</td>
-                                <td className='py-2 px-4 border-b max-sm:hidden'>{moment(job.date).format('ll')}</td>
+                                <td className='py-2 px-4 border-b'>{job.jobId?.title || "Unknown Title"}</td>
+                                <td className='py-2 px-4 border-b max-sm:hidden'>{job.jobId?.location || "Unknown Location"}</td>
+                                <td className='py-2 px-4 border-b max-sm:hidden'>{job.date ? moment(job.date).format('ll') : "Unknown Date"}</td>
                                 <td className='py-2 px-4 border-b'>
-                                    <span className={`${job.status === 'Accepted' ? 'bg-green-100' : job.status === 'Rejected' ? 'bg-red-100' : 'bg-blue-100'} px-4 py-1.5 rounded`}>{job.status}</span>
+                                    <span
+                                        className={`${job.status === 'Accepted'
+                                                ? 'bg-green-100'
+                                                : job.status === 'Rejected'
+                                                    ? 'bg-red-100'
+                                                    : 'bg-blue-100'
+                                            } px-4 py-1.5 rounded`}
+                                    >
+                                        {job.status || "Pending"}
+                                    </span>
                                 </td>
                             </tr>
-                        ) : (null))}
+                        ))}
                     </tbody>
+
                 </table>
             </div>
             <Footer />
