@@ -43,6 +43,9 @@ const ApplyJob = () => {
                 return toast.error('Upload resume to apply')
             }
             const token = await getToken()
+            if (!JobData?._id) {
+                return toast.error("Job data is not loaded yet")
+            }
             const { data } = await axios.post(backendUrl + '/api/users/apply',
                 { jobId: JobData._id },
                 { headers: { Authorization: `Bearer ${token}` } }
