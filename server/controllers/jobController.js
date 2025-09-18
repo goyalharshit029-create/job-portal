@@ -16,7 +16,7 @@ export const getJobById = async (req, res) => {
         const job = await Job.findById(id)
             .populate({
                 path: 'companyId',
-                select: '-password'
+                select: 'name image'
             })
         if (!job) {
             return res.json({
