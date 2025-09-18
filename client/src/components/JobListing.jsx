@@ -20,17 +20,17 @@ const JobListing = () => {
         )
     }
     useEffect(() => {
-        const matchesCategory = job => selectedCategories.length === 0 || selectedCategories.includes(job?.category)
-        const matchesLocation = job => selectedLocations.length === 0 || selectedLocations.includes(job?.location)
-        const matchesTitle = job => searchFilter.title === "" || job?.title?.toLowerCase().includes(searchFilter.title.toLowerCase())
-        const matchesSearchLocation = job => searchFilter.location === "" || job?.location?.toLowerCase().includes(searchFilter.location.toLowerCase())
-
         const newFilteredJobs = jobs
             .slice()
             .reverse()
-            .filter(job => job) // <-- mandatory: remove null or undefined jobs
-            .filter(job => matchesCategory(job) && matchesLocation(job) && matchesTitle(job) && matchesSearchLocation(job))
-
+            .filter(job => job) // remove null/undefined
+            .filter(job => {
+                const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(job?.category || "")
+                const locationMatch = selectedLocations.length === 0 || selectedLocations.includes(job?.location || "")
+                const titleMatch = !searchFilter?.title || (job?.title?.toLowerCase().includes(searchFilter.title.toLowerCase()))
+                const searchLocationMatch = !searchFilter?.location || (job?.location?.toLowerCase().includes(searchFilter.location.toLowerCase()))
+                return categoryMatch && locationMatch && titleMatch && searchLocationMatch
+            })
         setFilteredJobs(newFilteredJobs)
         setCurrentPage(1)
     }, [jobs, selectedCategories, selectedLocations, searchFilter])
