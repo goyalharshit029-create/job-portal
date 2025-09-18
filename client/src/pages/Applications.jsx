@@ -49,7 +49,7 @@ const Applications = () => {
             <div className='container px-4 min-h-[65vh] 2xl:px-20 mx-auto my-10'>
                 <h2 className='text-xl font-semibold'>Your Resume</h2>
                 <div className='flex gap-2 mb-6 mt-3'>
-                    {isEdit || (userData && userData.resume === "") ? (
+                    {isEdit || (userData && (!userData.resume || userData.resume === "")) ? (
                         <>
                             <label className='flex items-center' htmlFor="resumeUpload">
                                 <p className='bg-blue-100 text-blue-600 px-4 py-2 rounded-lg mr-2'>
