@@ -55,7 +55,7 @@ const ApplyJob = () => {
         }
     }
     const checkAlreadyApplied = () => {
-        const hasApplied = userApplications.some(item => item.jobId._id === JobData._id)
+        const hasApplied = userApplications.some(item => item?.jobId?._id === JobData?._id)
         setIsAlreadyApplied(hasApplied)
     }
     useEffect(() => {
@@ -73,7 +73,7 @@ const ApplyJob = () => {
                 <div className='bg-white text-black rounded-lg w-ful'>
                     <div className='flex justify-center md:justify-between flex-wrap gap-8 px-14 py-20 mb-6 bg-sky-50 border border-sky-400 rounded-xl'>
                         <div className='flex flex-col md:flex-row items-center'>
-                            <img className='h-24 bg-white rounded-lg p-4 mr-4 max-md:mb-4 border' src={JobData.companyId.image} alt="" />
+                            <img className='h-24 bg-white rounded-lg p-4 mr-4 max-md:mb-4 border' src={JobData?.companyId?.image} alt="" />
                             <div className='text-center md:text-left text-neutral-700'>
                                 <h1 className='text-2xl sm:text-4xl font-medium'>{JobData.title}</h1>
                                 <div className='flex flex-row flex-wrap max-md:justify-center gap-y-2 gap-6 items-center text-gray-600 mt-2'>
@@ -109,13 +109,13 @@ const ApplyJob = () => {
                         </div>
                         {/* Right Section More Jobs */}
                         <div className='w-full lg:w-1/3 mt-8 lg:mt-0 lg:ml-8 space-y-5'>
-                            <h2>More jobs from {JobData.companyId.name}</h2>
-                            {jobs.filter(job => job._id !== JobData._id && job.companyId._id === JobData.companyId._id)
+                            <h2>More jobs from {JobData?.companyId?.name}</h2>
+                            {jobs.filter(job => job?._id !== JobData?._id && job?.companyId?._id === JobData?.companyId?._id)
                                 .filter(job => {
                                     // Set of applied jobIds
-                                    const appliedJobsIds = new Set(userApplications.map(app => app.jobId && app.jobId._id))
+                                    const appliedJobsIds = new Set(userApplications.map(app => app?.jobId && app?.jobId?._id))
                                     // Return true if the user has not already applied for this job
-                                    return !appliedJobsIds.has(job._id)
+                                    return !appliedJobsIds.has(job?._id)
                                 }).slice(0, 4)
                                 .map((job, index) => <JobCard key={index} job={job} />)}
                         </div>
