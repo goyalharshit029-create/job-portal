@@ -24,9 +24,13 @@ const JobListing = () => {
         const matchesLocation = job => selectedLocations.length === 0 || selectedLocations.includes(job?.location)
         const matchesTitle = job => searchFilter.title === "" || job?.title?.toLowerCase().includes(searchFilter.title.toLowerCase())
         const matchesSearchLocation = job => searchFilter.location === "" || job?.location?.toLowerCase().includes(searchFilter.location.toLowerCase())
-        const newFilteredJobs = jobs.slice().reverse().filter(
-            job => matchesCategory(job) && matchesLocation(job) && matchesTitle(job) && matchesSearchLocation(job)
-        )
+
+        const newFilteredJobs = jobs
+            .slice()
+            .reverse()
+            .filter(job => job) // <-- mandatory: remove null or undefined jobs
+            .filter(job => matchesCategory(job) && matchesLocation(job) && matchesTitle(job) && matchesSearchLocation(job))
+
         setFilteredJobs(newFilteredJobs)
         setCurrentPage(1)
     }, [jobs, selectedCategories, selectedLocations, searchFilter])
