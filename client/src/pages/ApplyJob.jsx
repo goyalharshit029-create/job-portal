@@ -11,6 +11,7 @@ import Footer from '../components/Footer'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useAuth } from '@clerk/clerk-react'
+
 const ApplyJob = () => {
     const { id } = useParams()
     const { getToken } = useAuth()
@@ -18,6 +19,7 @@ const ApplyJob = () => {
     const [JobData, setJobData] = useState(null)
     const [isAlreadyApplied, setIsAlreadyApplied] = useState(false)
     const { jobs, backendUrl, userData, userApplications, fetchUserApplications } = useContext(AppContext)
+
     const fetchJob = async () => {
         try {
             const { data } = await axios.get(backendUrl + `/api/jobs/${id}`)
@@ -30,6 +32,7 @@ const ApplyJob = () => {
             toast.error(error.message)
         }
     }
+
     const applyHandler = async () => {
         try {
             if (!userData) {
@@ -54,18 +57,22 @@ const ApplyJob = () => {
             toast.error(error.message)
         }
     }
+
     const checkAlreadyApplied = () => {
         const hasApplied = userApplications.some(item => item?.jobId?._id === JobData?._id)
         setIsAlreadyApplied(hasApplied)
     }
+
     useEffect(() => {
         fetchJob()
     }, [id])
+
     useEffect(() => {
         if (userApplications.length > 0 && JobData) {
             checkAlreadyApplied()
         }
     }, [JobData, userApplications, id])
+
     return JobData ? (
         <>
             <Navbar />
@@ -112,9 +119,8 @@ const ApplyJob = () => {
                             <h2>More jobs from {JobData?.companyId?.name}</h2>
                             {jobs.filter(job => job?._id !== JobData?._id && job?.companyId?._id === JobData?.companyId?._id)
                                 .filter(job => {
-                                    // Set of applied jobIds
-                                    const appliedJobsIds = new Set(userApplications.map(app => app?.jobId && app?.jobId?._id))
-                                    // Return true if the user has not already applied for this job
+                                    // Set of applied jobIds (safe check with filter(Boolean))
+                                    const appliedJobsIds = new Set(userApplications.map(app => app?.jobId?._id).filter(Boolean))
                                     return !appliedJobsIds.has(job?._id)
                                 }).slice(0, 4)
                                 .map((job, index) => <JobCard key={index} job={job} />)}
