@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { assets, viewApplicationsPageData } from '../assets/assets'
+import { assets } from '../assets/assets'
 import { AppContext } from '../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import Loading from '../components/Loading'
+
 const ViewApplications = () => {
     const { backendUrl, companyToken } = useContext(AppContext)
     const [applicants, setApplicants] = useState(false)
+
     // Function to fetch company Job Applications data
     const fetchCompanyJobApplications = async () => {
         try {
@@ -14,7 +16,15 @@ const ViewApplications = () => {
                 { headers: { token: companyToken } }
             )
             if (data.success) {
-                setApplicants(data.applications.reverse())
+                // For demo: add mock AI detection results to each applicant
+                const demoApplicants = data.applications.reverse().map(app => ({
+                    ...app,
+                    aiDetection: {
+                        result: "Likely AI",
+                        confidence: "85.43%"
+                    }
+                }))
+                setApplicants(demoApplicants)
             } else {
                 toast.error(data.message)
             }
@@ -22,6 +32,7 @@ const ViewApplications = () => {
             toast.error(error.message)
         }
     }
+
     // Function to update Job Application Status
     const changeJobApplicationStatus = async (id, status) => {
         try {
@@ -38,11 +49,13 @@ const ViewApplications = () => {
             toast.error(error.message)
         }
     }
+
     useEffect(() => {
         if (companyToken) {
             fetchCompanyJobApplications()
         }
     }, [companyToken])
+
     return applicants ? applicants.length === 0 ? (
         <div className='flex items-center justify-center h-[70vh]'>
             <p className='text-xl sm:text-2xl'>No Applications Available</p>
@@ -58,6 +71,7 @@ const ViewApplications = () => {
                             <th className='py-2 px-4 text-left max-sm:hidden'>Job Title</th>
                             <th className='py-2 px-4 text-left max-sm:hidden'>Location</th>
                             <th className='py-2 px-4 text-left'>Resume</th>
+                            <th className='py-2 px-4 text-left'>AI Score</th>
                             <th className='py-2 px-4 text-left'>Action</th>
                         </tr>
                     </thead>
@@ -77,6 +91,14 @@ const ViewApplications = () => {
                                     >
                                         Resume <img src={assets.resume_download_icon} alt="" />
                                     </a>
+                                </td>
+                                {/* New column for AI score */}
+                                <td className='py-2 px-4 border-b'>
+                                    {applicant.aiDetection ? (
+                                        <span>{applicant.aiDetection.result} ({applicant.aiDetection.confidence})</span>
+                                    ) : (
+                                        <span>Pending</span>
+                                    )}
                                 </td>
                                 <td className='py-2 px-4 border-b relative'>
                                     {applicant.status === "Pending"
@@ -98,4 +120,5 @@ const ViewApplications = () => {
         </div>
     ) : <Loading />
 }
+
 export default ViewApplications
