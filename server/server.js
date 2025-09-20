@@ -29,7 +29,6 @@ app.post('/webhooks', clerkWebhooks)
 app.use('/api/company', companyRoutes)
 app.use('/api/jobs', jobRoutes)
 app.use('/api/users', userRoutes)
-app.use('/api', aiRoutes);
 // Port
 const PORT = process.env.PORT || 5000
 Sentry.setupExpressErrorHandler(app);
