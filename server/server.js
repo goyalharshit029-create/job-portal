@@ -17,9 +17,15 @@ const app = express()
 await connectDB()
 await connectCloudinary()
 // Middlewares
-app.use(cors())
-app.use(express.json())
-app.use(clerkMiddleware())
+// Middlewares
+app.use(cors({
+    origin: 'https://job-portal-new-client-green.vercel.app', // your frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'token']
+}));
+app.use(express.json());
+app.use(clerkMiddleware());
+
 // Routes
 app.get('/', (req, res) => res.send("API Working"))
 app.get("/debug-sentry", function mainHandler(req, res) {
