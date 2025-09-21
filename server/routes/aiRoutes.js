@@ -3,7 +3,7 @@ import { detectAI } from '../controllers/aiController.js';
 
 const router = express.Router();
 
-// POST /api/ai/detect
-router.post('/detect', detectAI);
+// POST /api/detect-ai
+router.post('/detect-ai', detectAI);
 
-export default router; //
+export default router;
